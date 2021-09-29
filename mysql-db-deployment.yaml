@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-db
+  name: mysql-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mysql-db
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: prevail
+        - name: MYSQL_HOST
+          value: localhost
+        - name: MYSQL_PASSWORD
+          value: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          value: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_USER
+          value: MYSQL_USER
+        image: mysql
+        name: mysql-db
+        ports:
+        - containerPort: 3306
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - SYS_NICE
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/setup.sql
+          name: mysql-db-claim0
+      restartPolicy: Always
+      volumes:
+      - name: mysql-db-claim0
+        persistentVolumeClaim:
+          claimName: mysql-db-claim0
+status: {}
