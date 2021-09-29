@@ -32,7 +32,7 @@ class App extends Component {
 
 
   submit = () => {
-    alert(JSON.stringify(this.state));
+    
     axios.post('/api/insert', this.state)
       .then(() => { alert('success post') })
     console.log(this.state)
